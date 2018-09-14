@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>League table</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<link rel="stylesheet" type="text/css" media="all"
+	href="/webjars/bootstrap/4.1.3/css/bootstrap.min.css"
+	th:href="@{/webjars/bootstrap/4.1.3/css/bootstrap.min.css}" />
+
+<script type="text/javascript"
+	th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"
+	src="/webjars/jquery/3.3.1-1/jquery.min.js"></script>
+<script type="text/javascript"
+	th:src="@{/webjars/bootstrap/4.1.3/js/bootstrap.min.js}"
+	src="/webjars/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<h1>Leagues</h1>
+		<p>
+			<a href="/ui/editLeague" th:href="@{/ui/editLeague}">Create</a>
+		</p>
+
+		<table class="table-responsive table-bordered">
+			<thead>
+				<tr>
+					<th>id</th>
+					<th>Title</th>
+					<th>Season</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="eachLeague : ${leagues}">
+					<td th:text="${eachLeague.id}"></td>
+					<td th:text="${eachLeague.title}"></td>
+					<td
+						th:text="${eachLeague.startYear + '&ndash;' + eachLeague.endYear}"></td>
+					<td><a href="/ui/editLeague/1"
+						th:href="@{/ui/editLeague/__${eachLeague.id}__}">Edit</a> <a
+						href="/ui/deleteLeague/1"
+						th:href="@{/ui/deleteLeague/__${eachLeague.id}__}">Delete</a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>

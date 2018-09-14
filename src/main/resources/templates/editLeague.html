@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>League</title>
+
+<link rel="stylesheet" type="text/css" media="all"
+	href="/webjars/bootstrap/4.1.3/css/bootstrap.min.css"
+	th:href="@{/webjars/bootstrap/4.1.3/css/bootstrap.min.css}" />
+
+<script type="text/javascript" th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"
+	src="/webjars/jquery/3.3.1-1/jquery.min.js"></script>
+<script type="text/javascript" th:src="@{/webjars/bootstrap/4.1.3/js/bootstrap.min.js}"
+	src="/webjars/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="container">
+
+		<h1>League</h1>
+
+		<form class="form-group" action="/ui/editLeague"
+			th:action="@{/ui/saveLeague}" method="post">
+			<input th:type="hidden" name="id" th:field="${league.id}" />
+			<div class="form-group">
+				<label for="title">Title</label> <input type="text"
+					class="form-control" id="title" th:field="${league.title}" />
+			</div>
+			<div class="form-group">
+				<label for="startYear">Start year</label> <input type="text"
+					class="form-control" id="startYear" th:field="${league.startYear}" />
+			</div>
+			<div class="form-group">
+				<label for="endYear">End year</label> <input type="text"
+					class="form-control" id="startYear" th:field="${league.endYear}" />
+			</div>
+			<button type="submit" class="btn btn-primary">Save</button>
+			<a href="#" th:href="@{/}" class="btn btn-danger" role="button">Cancel</a>
+		</form>
+
+		<p>
+			<a href="/ui/editTeam" th:href="@{/ui/addTeamToLeague/__${league.id}__}">Add a
+				team</a>
+		</p>
+		<table class="table-responsive table-bordered">
+			<caption>Teams in league</caption>
+			<thead>
+				<th>Id</th>
+				<th>Berger table position</th>
+				<th>FC Id</th>
+				<th>Initial points</th>
+				<th>Actions</th>
+			</thead>
+			<tbody>
+				<tr th:each="eachTeam : ${league.teams}">
+					<td th:text="${eachTeam.id}"></td>
+					<td th:text="${eachTeam.bergerTablePosition}"></td>
+					<td th:text="${eachTeam.wikiFCId}"></td>
+					<td th:text="${eachTeam.initialPoints}"></td>
+					<td><a th:href="@{/ui/editTeam/__${eachTeam.id}__}">Edit</a></td>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+
+</body>
+</html>
