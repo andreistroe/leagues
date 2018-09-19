@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>League</title>
+
+<link rel="stylesheet" type="text/css" media="all"
+	href="/webjars/bootstrap/4.1.3/css/bootstrap.min.css"
+	th:href="@{/webjars/bootstrap/4.1.3/css/bootstrap.min.css}" />
+
+<script type="text/javascript"
+	th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"
+	src="/webjars/jquery/3.3.1-1/jquery.min.js"></script>
+<script type="text/javascript"
+	th:src="@{/webjars/bootstrap/4.1.3/js/bootstrap.min.js}"
+	src="/webjars/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="container">
+
+		<h1>League rankings</h1>
+
+		<table class="table-responsive table-bordered">
+			<thead>
+				<th th:text="Rank"></th>
+				<th th:text="Team"></th>
+				<th th:text="Played"></th>
+				<th th:text="Stat"></th>
+				<th th:text="Goals"></th>
+				<th th:text="Points"></th>
+			</thead>
+			<tbody>
+				<tr th:each="eachTeam, teamStat: ${league.teams}">
+					<td th:text="${1 + teamStat.index}"></td>
+					<td th:text="${eachTeam.wikiFCId}"></td>
+					<td th:text="${eachTeam.played}"></td>
+					<td
+						th:text="${eachTeam.victories + ' &ndash; ' + eachTeam.draws + ' &ndash; ' + eachTeam.defeats}"></td>
+					<td
+						th:text="${eachTeam.goalsScored + ' &ndash; ' + eachTeam.goalsAgainst}"></td>
+					<td th:text="${3 * eachTeam.victories + eachTeam.draws}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>

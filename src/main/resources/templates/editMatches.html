@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>League</title>
+
+<link rel="stylesheet" type="text/css" media="all"
+	href="/webjars/bootstrap/4.1.3/css/bootstrap.min.css"
+	th:href="@{/webjars/bootstrap/4.1.3/css/bootstrap.min.css}" />
+
+<script type="text/javascript"
+	th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"
+	src="/webjars/jquery/3.3.1-1/jquery.min.js"></script>
+<script type="text/javascript"
+	th:src="@{/webjars/bootstrap/4.1.3/js/bootstrap.min.js}"
+	src="/webjars/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="container">
+
+		<h1>League matches</h1>
+
+		<form class="form-group"
+			th:action="@{/ui/saveMatches}" method="post"
+			th:object="${league}">
+			<input th:type="hidden" name="id" th:field="*{id}" />
+			<table th:each="eachDay, dayStat: *{days}"
+				class="table-responsive table-bordered" style="caption-side: top;">
+				<input th:type="hidden" th:field="*{days[__${dayStat.index}__].id}" />
+
+				<caption>
+					<label for="@{'dayNumber' + eachDay.id}">Day</label> <input
+						type="text" class="form-control" id="@{'dayIndex' + eachDay.id}"
+						name="@{'dayIndex' + eachDay.id}"
+						th:field="*{days[__${dayStat.index}__].index}" />
+				</caption>
+				<tbody>
+					<tr
+						th:each="eachMatch, matchStat: *{days[__${dayStat.index}__].matches}">
+						<input th:type="hidden"
+							th:field="*{days[__${dayStat.index}__].matches[__${matchStat.index}__].day.id}" />
+						<input th:type="hidden"
+							th:field="*{days[__${dayStat.index}__].matches[__${matchStat.index}__].hosts.id}" />
+						<input th:type="hidden"
+							th:field="*{days[__${dayStat.index}__].matches[__${matchStat.index}__].guests.id}" />
+
+						<td
+							th:text="*{days[__${dayStat.index}__].matches[__${matchStat.index}__].hosts.wikiFCId}"></td>
+						<td><input type="text" class="form-control"
+							id="@{'match' + eachMatch.id + 'hosts'}"
+							name="@{'match' + eachMatch.id + 'hosts'}"
+							th:field="*{days[__${dayStat.index}__].matches[__${matchStat.index}__].hostsGoals}" /></td>
+						<td><input type="text" class="form-control"
+							id="@{'match' + eachMatch.id + 'guests'}"
+							name="@{'match' + eachMatch.id + 'hosts'}"
+							th:field="*{days[__${dayStat.index}__].matches[__${matchStat.index}__].guestsGoals}" /></td>
+						<td
+							th:text="*{days[__${dayStat.index}__].matches[__${matchStat.index}__].guests.wikiFCId}"></td>
+						<td><a th:href="@{/ui/flipMatch/__${eachMatch.id}__}">Flip</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<button type="submit" class="btn btn-primary">Save</button>
+		</form>
+
+	</div>
+
+</body>

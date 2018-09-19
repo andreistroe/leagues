@@ -15,6 +15,7 @@ public class TeamSeason
     private Long id;
     private String wikiFCId;
     private String qId;
+    private String shortName;
     private Integer yearStart;
     private Integer yearEnd;
     private Integer bergerTablePosition;
@@ -25,8 +26,10 @@ public class TeamSeason
     @OneToOne(mappedBy = "previousSeason", fetch = FetchType.LAZY)
     private TeamSeason nextSeason;
 
-    private int matches = 0;
+    private int played = 0;
     private int victories = 0;
+    private int draws = 0;
+
     private int defeats = 0;
     private int goalsScored = 0;
     private int goalsAgainst = 0;
@@ -106,14 +109,14 @@ public class TeamSeason
         this.yearEnd = yearEnd;
     }
 
-    public int getMatches()
+    public int getPlayed()
     {
-        return matches;
+        return played;
     }
 
-    public void setMatches(int matches)
+    public void setPlayed(int matches)
     {
-        this.matches = matches;
+        this.played = matches;
     }
 
     public int getVictories()
@@ -184,5 +187,25 @@ public class TeamSeason
     public void setBergerTablePosition(Integer bergerTablePosition)
     {
         this.bergerTablePosition = bergerTablePosition;
+    }
+
+    public String getShortName()
+    {
+        return shortName;
+    }
+
+    public void setShortName(String shortName)
+    {
+        this.shortName = shortName;
+    }
+
+    public int getDraws()
+    {
+        return draws;
+    }
+
+    public void setDraws(int draws)
+    {
+        this.draws = draws;
     }
 }

@@ -1,5 +1,6 @@
 package ro.andreistroe.league.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class Day
 
     private int index;
     @OneToMany(mappedBy = "day", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Match> matches;
+    private List<Match> matches = new ArrayList<>();
     private Date startDate;
     private Date endDate;
     @ManyToOne

@@ -16,8 +16,8 @@ public class Match
     private TeamSeason hosts;
     @ManyToOne
     private TeamSeason guests;
-    private int hostsGoals;
-    private int guestsGoals;
+    private Integer hostsGoals;
+    private Integer guestsGoals;
     @ManyToOne
     private Day day;
 
@@ -51,22 +51,22 @@ public class Match
         this.guests = guests;
     }
 
-    public int getHostsGoals()
+    public Integer getHostsGoals()
     {
         return hostsGoals;
     }
 
-    public void setHostsGoals(int hostsGoals)
+    public void setHostsGoals(Integer hostsGoals)
     {
         this.hostsGoals = hostsGoals;
     }
 
-    public int getGuestsGoals()
+    public Integer getGuestsGoals()
     {
         return guestsGoals;
     }
 
-    public void setGuestsGoals(int guestsGoals)
+    public void setGuestsGoals(Integer guestsGoals)
     {
         this.guestsGoals = guestsGoals;
     }

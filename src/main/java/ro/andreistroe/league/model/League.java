@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 
 @Entity
 public class League
@@ -25,6 +26,7 @@ public class League
     @OneToMany(mappedBy = "league", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TeamSeason> teams = new ArrayList<>();
     @OneToMany(mappedBy = "league", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy(value="index")
     private List<Day> days = new ArrayList<>();
     
     @OneToOne(fetch=FetchType.LAZY)
