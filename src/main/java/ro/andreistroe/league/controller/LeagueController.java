@@ -203,6 +203,14 @@ public class LeagueController
     public String listRankings(Model model, @PathVariable(value = "id", required = true) Long leagueId)
     {
         League league = repo.findById(leagueId).get();
+        computeRankings(league);
+
+        model.addAttribute("league", league);
+        return "rankings";
+    }
+
+    private void computeRankings(League league)
+    {
         league.getTeams().stream().forEach(t -> {
             t.setPlayed(0);
             t.setDefeats(0);
@@ -235,8 +243,8 @@ public class LeagueController
             @Override
             public int compare(TeamSeason o1, TeamSeason o2)
             {
-                int points1 = 3 * o1.getVictories() + o1.getDraws();
-                int points2 = 3 * o2.getVictories() + o2.getDraws();
+                int points1 = 3 * o1.getVictories() + o1.getDraws() + o1.getInitialPoints();
+                int points2 = 3 * o2.getVictories() + o2.getDraws() + o2.getInitialPoints();
                 if (points1 != points2)
                 {
                     return points2 - points1;
@@ -247,12 +255,100 @@ public class LeagueController
                 {
                     return goaldiff2 - goaldiff1;
                 }
-                
+
                 return o2.getGoalsScored() - o1.getGoalsScored();
             }
         });
+    }
 
-        model.addAttribute("league", league);
-        return "rankings";
+    @RequestMapping(value = { "/ui/exportToWiki/{id}" })
+    public String exportToWiki(Model model, @PathVariable(value = "id", required = true) Long id)
+    {
+        League l = repo.findById(id).get();
+        StringBuilder resultsTemplate = new StringBuilder();
+        List<TeamSeason> teams = l.getTeams();
+        teams.sort(new Comparator<TeamSeason>()
+        {
+
+            @Override
+            public int compare(TeamSeason o1, TeamSeason o2)
+            {
+                return o1.getBergerTablePosition() - o2.getBergerTablePosition();
+            }
+        });
+        for (TeamSeason eachTeam : teams)
+        {
+            resultsTemplate.append("| team").append(eachTeam.getBergerTablePosition()).append(" = ").append(eachTeam.getShortName());
+        }
+
+        resultsTemplate.append("\n");
+        for (TeamSeason eachTeam : teams)
+        {
+            resultsTemplate.append("\n| name_").append(eachTeam.getShortName()).append(" = ").append("{{ClubFotbal|").append(eachTeam.getWikiFCId()).append('|')
+                .append(l.getEndYear()).append("-06").append("}}");
+        }
+
+        List<Day> days = l.getDays();
+        days.sort(new Comparator<Day>()
+        {
+            @Override
+            public int compare(Day o1, Day o2)
+            {
+                return o2.getIndex() - o1.getIndex();
+            }
+        });
+        for (Day eachDay : days)
+        {
+            resultsTemplate.append("\n");
+            for (Match eachMatch : eachDay.getMatches())
+            {
+                if (null != eachMatch.getGuestsGoals() && null != eachMatch.getHostsGoals())
+                {
+                    resultsTemplate.append("\n| match_").append(eachMatch.getHosts().getShortName()).append('_').append(eachMatch.getGuests().getShortName()).append(" = ")
+                        .append(eachMatch.getHostsGoals()).append("–").append(eachMatch.getGuestsGoals());
+                }
+            }
+        }
+        model.addAttribute("results", resultsTemplate.toString());
+
+        StringBuilder rankingsTemplate = new StringBuilder();
+        computeRankings(l);
+        int rank = 0;
+        for (TeamSeason eachTeam : l.getTeams())
+        {
+            rank++;
+            rankingsTemplate.append("|team").append(rank).append('=').append(eachTeam.getShortName());
+        }
+        rankingsTemplate.append("\n");
+        for (TeamSeason eachTeam : l.getTeams())
+        {
+            rankingsTemplate.append("\n");
+            rankingsTemplate.append("|win_").append(eachTeam.getShortName()).append('=').append(eachTeam.getVictories());
+            rankingsTemplate.append("|draw_").append(eachTeam.getShortName()).append('=').append(eachTeam.getDraws());
+            rankingsTemplate.append("|loss_").append(eachTeam.getShortName()).append('=').append(eachTeam.getDefeats());
+            rankingsTemplate.append("|gf_").append(eachTeam.getShortName()).append('=').append(eachTeam.getGoalsScored());
+            rankingsTemplate.append("|ga_").append(eachTeam.getShortName()).append('=').append(eachTeam.getGoalsAgainst());
+            rankingsTemplate.append("<!-- ").append(eachTeam.getWikiFCId()).append(" -->");
+        }
+
+        rankingsTemplate.append("\n");
+        for (TeamSeason eachTeam : teams)
+        {
+            if (0 != eachTeam.getInitialPoints())
+            {
+                rankingsTemplate.append("| adjust_points_").append(eachTeam.getShortName()).append(" = ").append(eachTeam.getInitialPoints());
+            }
+        }
+
+        rankingsTemplate.append("\n\n");
+
+        for (TeamSeason eachTeam : teams)
+        {
+            rankingsTemplate.append("| name_").append(eachTeam.getShortName()).append(" = ").append("{{ClubFotbal|").append(eachTeam.getWikiFCId()).append('|')
+                .append(l.getEndYear()).append("-06").append("}}");
+        }
+
+        model.addAttribute("rankings", rankingsTemplate.toString());
+        return "exported";
     }
 }
