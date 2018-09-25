@@ -1,7 +1,9 @@
 package ro.andreistroe.league.controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -127,6 +129,7 @@ public class LeagueController
         }
         int[] dayOrder = new int[bergerTableSize - 1];
         dayOrder[0] = 0;
+        /*
         int crtIdx = dayOrder.length - 2;
         for (int dayIdx = 1; dayIdx < dayOrder.length; dayIdx++)
         {
@@ -137,7 +140,21 @@ public class LeagueController
                 crtIdx = dayOrder.length - 1;
             }
         }
+        */
 
+        for (int i = 0; i < dayOrder.length; i++)
+        {
+            if (i % 2 != 0)
+            {
+                dayOrder[(i + dayOrder.length) / 2] = i;
+            }
+            else
+            {
+                dayOrder[i / 2] = i;
+            }
+        }
+
+        //for (int i = 1; i < dayOrder.length; i++) dayOrder[i] = i;
         //round-robin generator loop
         for (int dayIdx = 0; dayIdx < bergerTableSize - 1; dayIdx++)
         {
@@ -147,8 +164,8 @@ public class LeagueController
 
             Match topMatch = new Match();
             topMatch.setDay(crtDay);
-            topMatch.setHosts(0 == dayIdx % 2 ? bergerTable[header] : bergerTable[centerPoint]);
-            topMatch.setGuests(0 == dayIdx % 2 ? bergerTable[centerPoint] : bergerTable[header]);
+            topMatch.setHosts(0 == dayOrder[dayIdx] % 2 ? bergerTable[header] : bergerTable[centerPoint]);
+            topMatch.setGuests(0 == dayOrder[dayIdx] % 2 ? bergerTable[centerPoint] : bergerTable[header]);
             crtDay.getMatches().add(topMatch);
 
             for (int i = 0; i < leftSide.length; i++)
@@ -287,6 +304,11 @@ public class LeagueController
             resultsTemplate.append("\n| name_").append(eachTeam.getShortName()).append(" = ").append("{{ClubFotbal|").append(eachTeam.getWikiFCId()).append('|')
                 .append(l.getEndYear()).append("-06").append("}}");
         }
+        Calendar cal = Calendar.getInstance();
+        StringBuilder dateBuilder = new StringBuilder("{{Dată|"); 
+        dateBuilder.append(cal.get(Calendar.YEAR)).append('|').append(1 + cal.get(Calendar.MONTH)).append('|').append(cal.get(Calendar.DAY_OF_MONTH))
+            .append("}}\n");
+        resultsTemplate.append("\n\n| update = ").append(dateBuilder.toString()).append("\n");
 
         List<Day> days = l.getDays();
         days.sort(new Comparator<Day>()
@@ -294,24 +316,31 @@ public class LeagueController
             @Override
             public int compare(Day o1, Day o2)
             {
-                return o2.getIndex() - o1.getIndex();
+                return o1.getIndex() - o2.getIndex();
             }
         });
         for (Day eachDay : days)
         {
-            resultsTemplate.append("\n");
+            boolean dayPlayed = false;
             for (Match eachMatch : eachDay.getMatches())
             {
                 if (null != eachMatch.getGuestsGoals() && null != eachMatch.getHostsGoals())
                 {
                     resultsTemplate.append("\n| match_").append(eachMatch.getHosts().getShortName()).append('_').append(eachMatch.getGuests().getShortName()).append(" = ")
                         .append(eachMatch.getHostsGoals()).append("–").append(eachMatch.getGuestsGoals());
+                    dayPlayed = true;
                 }
+            }
+            if (dayPlayed)
+            {
+                resultsTemplate.append("\n");
             }
         }
         model.addAttribute("results", resultsTemplate.toString());
 
         StringBuilder rankingsTemplate = new StringBuilder();
+        rankingsTemplate.append("\n\n| update = ").append(dateBuilder.toString()).append("\n");
+
         computeRankings(l);
         int rank = 0;
         for (TeamSeason eachTeam : l.getTeams())
