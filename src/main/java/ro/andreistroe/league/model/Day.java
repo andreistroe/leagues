@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
 @Entity
 public class Day
@@ -20,6 +21,7 @@ public class Day
 
     private int index;
     @OneToMany(mappedBy = "day", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy(value="id")
     private List<Match> matches = new ArrayList<>();
     private Date startDate;
     private Date endDate;
