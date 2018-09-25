@@ -30,6 +30,6 @@ public class MatchController
         
         matchRepository.save(match);
         
-        return new ModelAndView(String.format("forward:/ui/viewMatches/%d", match.getDay().getLeague().getId()));
+        return new ModelAndView(String.format("redirect:/ui/viewMatches/%d", match.getDay().getLeague().getId()));
     }
 }
