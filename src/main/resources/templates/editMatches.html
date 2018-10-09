@@ -28,11 +28,12 @@
 			<table th:each="eachDay, dayStat: *{days}"
 				class="table-responsive table-bordered" style="caption-side: top;">
 				<input th:type="hidden" th:field="*{days[__${dayStat.index}__].id}" />
+				<a th:name="*{'day' + days[__${dayStat.index}__].index}"/>
 
 				<caption>
-					<label for="@{'dayNumber' + eachDay.id}">Day</label> <input
-						type="text" class="form-control" id="@{'dayIndex' + eachDay.id}"
-						name="@{'dayIndex' + eachDay.id}"
+					<label th:for="*{'dayIndex' + __${eachDay.id}__}">Day</label> <input
+						type="text" class="form-control" th:id="*{'dayIndex' + __${eachDay.id}__}"
+						style="width: 50px;"
 						th:field="*{days[__${dayStat.index}__].index}" />
 				</caption>
 				<tbody>
@@ -48,11 +49,11 @@
 						<td
 							th:text="*{days[__${dayStat.index}__].matches[__${matchStat.index}__].hosts.wikiFCId}"></td>
 						<td><input type="text" class="form-control"
-							id="@{'match' + eachMatch.id + 'hosts'}"
+							th:id="*{'match' + __${eachMatch.id}__ + 'hosts'}"
 							name="@{'match' + eachMatch.id + 'hosts'}"
 							th:field="*{days[__${dayStat.index}__].matches[__${matchStat.index}__].hostsGoals}" /></td>
 						<td><input type="text" class="form-control"
-							id="@{'match' + eachMatch.id + 'guests'}"
+							th:id="@{'match' + __${eachMatch.id}__ + 'guests'}"
 							name="@{'match' + eachMatch.id + 'hosts'}"
 							th:field="*{days[__${dayStat.index}__].matches[__${matchStat.index}__].guestsGoals}" /></td>
 						<td
