@@ -50,11 +50,11 @@
 							th:text="*{days[__${dayStat.index}__].matches[__${matchStat.index}__].hosts.wikiFCId}"></td>
 						<td><input type="text" class="form-control"
 							th:id="*{'match' + __${eachMatch.id}__ + 'hosts'}"
-							name="@{'match' + eachMatch.id + 'hosts'}"
+							name="@{'match' + eachMatch.id + 'hosts'}" style="width: 50px;"
 							th:field="*{days[__${dayStat.index}__].matches[__${matchStat.index}__].hostsGoals}" /></td>
 						<td><input type="text" class="form-control"
-							th:id="@{'match' + __${eachMatch.id}__ + 'guests'}"
-							name="@{'match' + eachMatch.id + 'hosts'}"
+							th:id="@{'mat    ch' + __${eachMatch.id}__ + 'guests'}"
+							name="@{'match' + eachMatch.id + 'hosts'}" style="width: 50px;"
 							th:field="*{days[__${dayStat.index}__].matches[__${matchStat.index}__].guestsGoals}" /></td>
 						<td
 							th:text="*{days[__${dayStat.index}__].matches[__${matchStat.index}__].guests.wikiFCId}"></td>
