@@ -39,7 +39,7 @@
 						th:text="${eachTeam.victories + ' &ndash; ' + eachTeam.draws + ' &ndash; ' + eachTeam.defeats}"></td>
 					<td
 						th:text="${eachTeam.goalsScored + ' &ndash; ' + eachTeam.goalsAgainst}"></td>
-					<td th:text="${3 * eachTeam.victories + eachTeam.draws}"></td>
+					<td th:text="${3 * eachTeam.victories + eachTeam.draws + eachTeam.initialPoints}"></td>
 				</tr>
 			</tbody>
 		</table>
