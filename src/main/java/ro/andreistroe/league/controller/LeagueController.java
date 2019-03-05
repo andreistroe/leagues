@@ -293,9 +293,11 @@ public class LeagueController
                 return o1.getBergerTablePosition() - o2.getBergerTablePosition();
             }
         });
+        int idx = 1;
         for (TeamSeason eachTeam : teams)
         {
-            resultsTemplate.append("| team").append(eachTeam.getBergerTablePosition()).append(" = ").append(eachTeam.getShortName());
+            resultsTemplate.append("| team").append(idx).append(" = ").append(eachTeam.getShortName());
+            idx++;
         }
 
         resultsTemplate.append("\n");
