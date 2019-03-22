@@ -165,7 +165,10 @@ public class LeagueController
             topMatch.setDay(crtDay);
             topMatch.setHosts(0 == dayOrder[dayIdx] % 2 ? bergerTable[header] : bergerTable[centerPoint]);
             topMatch.setGuests(0 == dayOrder[dayIdx] % 2 ? bergerTable[centerPoint] : bergerTable[header]);
-            crtDay.getMatches().add(topMatch);
+            if (null != topMatch.getHosts() && null != topMatch.getGuests())
+            {
+                crtDay.getMatches().add(topMatch);
+            }
 
             for (int i = 0; i < leftSide.length; i++)
             {
@@ -173,7 +176,10 @@ public class LeagueController
                 eachMatch.setDay(crtDay);
                 eachMatch.setHosts(0 == dayIdx % 2 ? bergerTable[leftSide[i]] : bergerTable[rightSide[i]]);
                 eachMatch.setGuests(0 == dayIdx % 2 ? bergerTable[rightSide[i]] : bergerTable[leftSide[i]]);
-                crtDay.getMatches().add(eachMatch);
+                if (null != eachMatch.getHosts() && null != eachMatch.getGuests())
+                {
+                    crtDay.getMatches().add(eachMatch);
+                }
             }
             league.getDays().add(crtDay);
 
@@ -306,9 +312,8 @@ public class LeagueController
                 .append(l.getEndYear()).append("-06").append("}}");
         }
         Calendar cal = Calendar.getInstance();
-        StringBuilder dateBuilder = new StringBuilder("{{Dată|"); 
-        dateBuilder.append(cal.get(Calendar.YEAR)).append('|').append(1 + cal.get(Calendar.MONTH)).append('|').append(cal.get(Calendar.DAY_OF_MONTH))
-            .append("}}\n");
+        StringBuilder dateBuilder = new StringBuilder("{{Dată|");
+        dateBuilder.append(cal.get(Calendar.YEAR)).append('|').append(1 + cal.get(Calendar.MONTH)).append('|').append(cal.get(Calendar.DAY_OF_MONTH)).append("}}\n");
         resultsTemplate.append("\n\n| update = ").append(dateBuilder.toString()).append("\n");
 
         List<Day> days = l.getDays();
